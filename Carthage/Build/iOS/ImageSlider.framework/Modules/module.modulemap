@@ -1,0 +1,10 @@
+framework module ImageSlider {
+  umbrella header "ImageSlider.h"
+
+  export *
+  module * { export * }
+}
+
+module ImageSlider.Swift {
+    header "ImageSlider-Swift.h"
+}
