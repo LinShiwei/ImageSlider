@@ -5,7 +5,7 @@
 
 Image slider (image scrolling) framework.
 
-![image](https://raw.githubusercontent.com/LinShiwei/ImageSlider/master/images/ImageSlider-v1.gif)
+![image](images/ImageSlider-v1.gif)
 
 ## Installation
 ### Carthage
@@ -17,7 +17,7 @@ github "LinShiwei/ImageSlider"
 ```
 
 ### Manually
-* Just include the two .swift files found on the `ImageSlider` folder on the demo Xcode project.
+* Just include the two ｀.swift｀ files found on the `ImageSlider` folder on the demo Xcode project.
 
 ## Usage 
 
@@ -27,7 +27,7 @@ Just add a `UIView` object to your `storyboard` and change its `Class` and `Modu
 
 Connect an `IBOutlet` to the `UIView` object and set its `images` property:
 
-![image](/images/屏幕快照 2016-07-20 13.34.25.png)
+![image](images/屏幕快照 2016-07-20 13.34.25.png)
 
 ## License
 
