@@ -25,9 +25,23 @@ Just add a `UIView` object to your `storyboard` and change its `Class` and `Modu
 
 ![image](images/屏幕快照 2016-07-20 12.37.47.png)
 
-Connect an `IBOutlet` to the `UIView` object and set its `images` property:
+Connect an `IBOutlet` to the `UIView` object:
 
-![image](images/屏幕快照 2016-07-20 13.34.25.png)
+```swift
+@IBOutlet weak var imageSlider: ImageSliderView!
+```
+
+And set its `images` property:
+
+```swift
+let image1 = UIImage(named: "image1")!
+let image2 = UIImage(named: "image2")!
+let image3 = UIImage(named: "image3")!
+let image4 = UIImage(named: "image4")!
+let images = [image1,image2,image3,image4]
+
+imageSlider.images = images
+```
 
 ## License
 
