@@ -13,6 +13,7 @@ public class ImageSliderView: UIView{
     var imageSliderScrollView : ImageSliderScrollView?
     
     private var pageControl = UIPageControl()
+    
     public var images = [UIImage](){
         didSet{
             guard images.count != 0 else{return}
@@ -21,6 +22,7 @@ public class ImageSliderView: UIView{
             pageControl.numberOfPages = images.count
         }
     }
+    
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         imageSliderScrollView = ImageSliderScrollView(frame: bounds)
@@ -31,6 +33,7 @@ public class ImageSliderView: UIView{
         self.addSubview(pageControl)
     }
 }
+
 extension ImageSliderView:UIScrollViewDelegate{
     public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         guard let view = scrollView as? ImageSliderScrollView else {return}
@@ -42,6 +45,7 @@ extension ImageSliderView:UIScrollViewDelegate{
     }
     public func scrollViewDidScroll(scrollView: UIScrollView) {
         guard let view = scrollView as? ImageSliderScrollView else {return}
+        view.updateTransit()    
         pageControl.currentPage = view.updateCurrentPage()
     }
 }

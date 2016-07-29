@@ -9,15 +9,14 @@
 import UIKit
 import AVFoundation
 
-public class ImageSliderScrollView: UIScrollView {
+class ImageSliderScrollView: UIScrollView {
 
     var currentIndex = 0
 
     var images = [UIImage](){
         didSet{
             guard images.count != 0 else {return}
-            contentSize = CGSize(width: frame.width * CGFloat(images.count), height: frame.height)
-
+            contentSize = CGSize(width: frame.width * CGFloat(images.count + 2), height: frame.height)
             for view in self.subviews where view is UIImageView {
                 view.removeFromSuperview()
             }
@@ -26,6 +25,12 @@ public class ImageSliderScrollView: UIScrollView {
                 imageView.image = images[index]
                 self.addSubview(imageView)
             }
+            for imageview in createTransitImageView() {
+                self.addSubview(imageview)
+            }
+            initTimer()
+            
+            contentOffset = CGPoint(x: frame.width, y: 0)
         }
     }
     
@@ -36,26 +41,16 @@ public class ImageSliderScrollView: UIScrollView {
         pagingEnabled = true
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
-        
-        backgroundColor = UIColor.redColor()
-        initTimer()
+//        backgroundColor = UIColor.redColor()
 
     }
 
-    required public init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//        pagingEnabled = true
-//        showsHorizontalScrollIndicator = false
-//        showsVerticalScrollIndicator = false
-//        
-//    }
-    
     func initTimer(){
-        guard timer == nil || timer?.valid == false else{ return}
+        guard timer == nil || timer?.valid == false else{ return }
         timer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "moveToNextPage", userInfo: nil, repeats: true)
         
     }
@@ -66,14 +61,10 @@ public class ImageSliderScrollView: UIScrollView {
             view.userInteractionEnabled = false
         }
         let pageWidth:CGFloat = frame.width
-        let maxWidth:CGFloat = pageWidth * CGFloat(images.count)
         let contentOffset:CGFloat = self.contentOffset.x
         
-        var slideToX = contentOffset + pageWidth
-        
-        if  contentOffset + pageWidth == maxWidth{
-            slideToX = 0
-        }
+        let slideToX = contentOffset + pageWidth
+
         scrollRectToVisible(CGRect(x: slideToX, y: 0, width: pageWidth, height: frame.height), animated: true)
     }
     
@@ -93,16 +84,39 @@ public class ImageSliderScrollView: UIScrollView {
             view.userInteractionEnabled = true
         }
         let pageWidth:CGFloat = frame.width
-        let currentPage:Int = Int(floor((self.contentOffset.x-pageWidth/2)/pageWidth)+1)
+        let currentPage:Int = Int(floor(self.contentOffset.x-pageWidth/2)/pageWidth)
         currentIndex = currentPage
-        assert(0..<images.count ~= currentPage)
         return currentPage
+    }
+    
+    func updateTransit() {
+        if contentOffset.x == 0 {
+            contentOffset.x = contentSize.width - frame.width*2
+        }
+        if contentOffset.x == contentSize.width - frame.width {
+            contentOffset.x = frame.width
+        }
     }
     
     private func createImageView(index:Int)->UIImageView {
         var frame = centerFrameFromImageSize(images[index].size)
-        frame.origin.x += self.frame.width * CGFloat(index)
+        frame.origin.x += self.frame.width * CGFloat(index+1)
+
         return UIImageView(frame: frame)
+    }
+    
+    private func createTransitImageView()->[UIImageView] {
+        var frameLast = centerFrameFromImageSize(images[0].size)
+        frameLast.origin.x += self.frame.width * CGFloat(images.count+1)
+        let imageViewLast = UIImageView(frame:frameLast)
+        imageViewLast.image = images[0]
+        
+        var frameFirst = centerFrameFromImageSize(images[images.count-1].size)
+        frameFirst.origin.x = 0
+        let imageViewFirst = UIImageView(frame:frameFirst)
+        imageViewFirst.image = images[images.count-1]
+        
+        return [imageViewFirst,imageViewLast]
     }
     
     private func centerFrameFromImageSize(imageSize:CGSize) -> CGRect {
