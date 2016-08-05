@@ -121,6 +121,6 @@ class ImageSliderScrollView: UIScrollView {
     
     private func centerFrameFromImageSize(imageSize:CGSize) -> CGRect {
 
-        return AVMakeRectWithAspectRatioInsideRect(imageSize, bounds)
+        return AVMakeRectWithAspectRatioInsideRect(imageSize, CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
     }
 }
