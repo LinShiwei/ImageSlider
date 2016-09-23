@@ -8,13 +8,13 @@
 
 import UIKit
 
-public class ImageSliderView: UIView{
+open class ImageSliderView: UIView{
 
     var imageSliderScrollView : ImageSliderScrollView?
     
-    private var pageControl = UIPageControl()
+    fileprivate var pageControl = UIPageControl()
     
-    public var images = [UIImage](){
+    open var images = [UIImage](){
         didSet{
             guard images.count != 0 else{return}
             guard let scrollView = imageSliderScrollView else{return}
@@ -35,15 +35,15 @@ public class ImageSliderView: UIView{
 }
 
 extension ImageSliderView:UIScrollViewDelegate{
-    public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         guard let view = scrollView as? ImageSliderScrollView else {return}
         view.initTimer()
     }
-    public func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         guard let view = scrollView as? ImageSliderScrollView else {return}
         view.prepareForDragging()
     }
-    public func scrollViewDidScroll(scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let view = scrollView as? ImageSliderScrollView else {return}
         view.updateTransit()    
         pageControl.currentPage = view.updateCurrentPage()

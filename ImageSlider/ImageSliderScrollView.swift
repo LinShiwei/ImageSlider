@@ -34,11 +34,11 @@ class ImageSliderScrollView: UIScrollView {
         }
     }
     
-    private var timer:NSTimer?
+    fileprivate var timer:Timer?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        pagingEnabled = true
+        isPagingEnabled = true
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
 //        backgroundColor = UIColor.redColor()
@@ -50,15 +50,15 @@ class ImageSliderScrollView: UIScrollView {
     }
     
     func initTimer(){
-        guard timer == nil || timer?.valid == false else{ return }
-        timer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "moveToNextPage", userInfo: nil, repeats: true)
+        guard timer == nil || timer?.isValid == false else{ return }
+        timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(ImageSliderScrollView.moveToNextPage), userInfo: nil, repeats: true)
         
     }
     
     func moveToNextPage (){
-        userInteractionEnabled = false
+        isUserInteractionEnabled = false
         for view in subviews {
-            view.userInteractionEnabled = false
+            view.isUserInteractionEnabled = false
         }
         let pageWidth:CGFloat = frame.width
         let contentOffset:CGFloat = self.contentOffset.x
@@ -69,9 +69,9 @@ class ImageSliderScrollView: UIScrollView {
     }
     
     func prepareForDragging() {
-        userInteractionEnabled = false
+        isUserInteractionEnabled = false
         for view in subviews {
-            view.userInteractionEnabled = false
+            view.isUserInteractionEnabled = false
         }
         if let timer = timer {
             timer.invalidate()
@@ -79,9 +79,9 @@ class ImageSliderScrollView: UIScrollView {
     }
     
     func updateCurrentPage()->Int{
-        userInteractionEnabled = true
+        isUserInteractionEnabled = true
         for view in subviews {
-            view.userInteractionEnabled = true
+            view.isUserInteractionEnabled = true
         }
         let pageWidth:CGFloat = frame.width
         let currentPage:Int = Int(floor(self.contentOffset.x-pageWidth/2)/pageWidth)
@@ -98,14 +98,14 @@ class ImageSliderScrollView: UIScrollView {
         }
     }
     
-    private func createImageView(index:Int)->UIImageView {
+    fileprivate func createImageView(_ index:Int)->UIImageView {
         var frame = centerFrameFromImageSize(images[index].size)
         frame.origin.x += self.frame.width * CGFloat(index+1)
 
         return UIImageView(frame: frame)
     }
     
-    private func createTransitImageView()->[UIImageView] {
+    fileprivate func createTransitImageView()->[UIImageView] {
         var frameLast = centerFrameFromImageSize(images[0].size)
         frameLast.origin.x += self.frame.width * CGFloat(images.count+1)
         let imageViewLast = UIImageView(frame:frameLast)
@@ -119,8 +119,8 @@ class ImageSliderScrollView: UIScrollView {
         return [imageViewFirst,imageViewLast]
     }
     
-    private func centerFrameFromImageSize(imageSize:CGSize) -> CGRect {
+    fileprivate func centerFrameFromImageSize(_ imageSize:CGSize) -> CGRect {
 
-        return AVMakeRectWithAspectRatioInsideRect(imageSize, CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
+        return AVMakeRect(aspectRatio: imageSize, insideRect: CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
     }
 }
