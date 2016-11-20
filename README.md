@@ -42,9 +42,12 @@ let images = [image1,image2,image3,image4]
 
 imageSlider.images = images
 ```
+**Don't forget to `import ImageSlider` at the top of the file using ImageSlider.**
 
 ## License
 
 Source code of this project is available under the standard MIT license. 
 
 Please have a look at [the license file](LICENSE.md).
+
+
